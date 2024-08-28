@@ -1,0 +1,93 @@
+Datasets:
+  20220215_canteen_night:
+    platform: handheld
+    label: 20220215\_Canteen\_Night
+    date: 20220215
+    title: 20220215\_Canteen\_Night
+  20220216_canteen_day:
+    platform: handheld
+    label: 20220216\_Canteen\_Day
+    date: 20220216
+    title: 20220216\_Canteen\_Day
+  20220215_garden_night:
+    platform: handheld
+    label: 20220215\_Garden\_Night
+    date: 20220215
+    title: 20220215\_Garden\_Night
+  20220216_garden_day:
+    platform: handheld
+    label: 20220216\_Garden\_Day
+    date: 20220216
+    title: 20220216\_Garden\_Day
+  20220216_corridor_day:
+    platform: handheld
+    label: 20220216\_Corridor\_Day
+    date: 20220216
+    title: 20220216\_Corridor\_Day    
+  20220216_escalator_day:
+    platform: handheld
+    label: 20220216\_Escalator\_Day
+    date: 20220216
+    title: 20220216\_Escalator\_Day
+  20220225_building_day:
+    platform: handheld
+    label: 20220225\_Building\_Day
+    date: 20220225
+    title: 20220225\_Building\_Day
+  20220216_MCR_slow:
+    platform: handheld
+    label: 20220216\_MCR\_Slow
+    date: 20220216
+    title: 20220216\_MCR\_Slow
+  20220216_MCR_normal:
+    platform: handheld
+    label: 20220216\_MCR\_Normal
+    date: 20220216
+    title: 20220216\_MCR\_Normal
+  20220216_MCR_fast:
+    platform: handheld
+    label: 20220216\_MCR\_Fast
+    date: 20220216
+    title: 20220216\_MCR\_Fast
+  20220219_MCR_slow_00:
+    platform: quadrupedal_robot
+    label: 20220219\_MCR\_Slow\_00
+    date: 20220219
+    title: 20220219\_MCR\_Slow\_00
+  20220219_MCR_slow_01:
+    platform: quadrupedal_robot
+    label: 20220219\_MCR\_Slow\_01
+    date: 20220219
+    title: 20220219\_MCR\_Slow\_01
+  20220219_MCR_normal_00:
+    platform: quadrupedal_robot
+    label: 20220219\_MCR\_Normal\_00
+    date: 20220219
+    title: 20220219\_MCR\_Normal\_00
+  20220219_MCR_normal_01:
+    platform: quadrupedal_robot
+    label: 20220219\_MCR\_Normal\_01
+    date: 20220219
+    title: 20220219\_MCR\_Normal\_01
+  20220219_MCR_fast_00:
+    platform: quadrupedal_robot
+    label: 20220219\_MCR\_Fast\_00
+    date: 20220219
+    title: 20220219\_MCR\_Fast\_00
+  20220219_MCR_fast_01:
+    platform: quadrupedal_robot
+    label: 20220219\_MCR\_Fast\_01
+    date: 20220219
+    title: 20220219\_MCR\_Fast\_01
+  20220226_campus_road_day:
+    platform: apollo
+    label: 20220226\_Campus\_Road\_Day
+    date: 20220226
+    title: 20220226\_Campus\_Road\_Day
+Algorithms:
+  estimated:
+    fn: estimated
+    label: Estimated
+
+RelDistances: []   # used to specify the sub-trajectory lengths in the relative error
+RelDistancePercentages: []

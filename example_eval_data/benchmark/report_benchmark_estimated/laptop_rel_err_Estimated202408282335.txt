@@ -1,0 +1,2 @@
+               & Translation (\%) &  Rotation (deg/meter)
+estimated         & 45.060 &  2.080 
