@@ -1,6 +1,4 @@
-# Evaluation of estimated trajectories for PRCV 2022 
-
-<img src="README/image-20220811013057509.png" alt="image-20220811013057509" style="zoom:33%;" />
+# Evaluation of SLAM Trajectory
 
 ### Installation
 
@@ -27,7 +25,7 @@ The package is written in python and tested in Ubuntu 16.04 and 18.04.
   sudo apt install  texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
   ```
 
-### Run the evaluation code
+<!-- ### Run the evaluation code
 1. Set configuration files: [PRCV2022.yaml](evaluation/rpg_trajectory_evaluation/analyze_trajectories_config/PRCV2022.yaml)
 
 2. Set the **Base_Folder** in the bash file: [run_traj_eval_PRCV2022.sh](evaluation/script/bash/run_traj_eval_PRCV2022.sh)
@@ -44,7 +42,7 @@ The package is written in python and tested in Ubuntu 16.04 and 18.04.
 
 5. Please check line 528 in [analyze_trajectories_PRCV2022.py](evaluation/rpg_trajectory_evaluation/scripts/analyze_trajectories_PRCV2022.py) for the exception handle (i.e., format error).
 
-6. The evaluation report will be saved as a pdf file [estimated_trajectory_top.pdf](benchmark/estimated/report/estimated_trajectory_top.pdf)
+6. The evaluation report will be saved as a pdf file [estimated_trajectory_top.pdf](benchmark/estimated/report/estimated_trajectory_top.pdf) -->
 
 ### Having questions with the evaluation code?
 1. Please contact Dr.Jianhao Jiao (jiaojh1994@gmail.com)
