@@ -1,12 +1,13 @@
 # add eval_cfg.yaml
 export Algorithm_Result_Path=/Titan/code/robohike_ws/src/slam_trajectory_evaluation/example_eval_data/benchmark/estimated
 export Groundtruth_Path=/Titan/code/robohike_ws/src/slam_trajectory_evaluation/example_eval_data/groundtruth
-export EVALUATION_SCRIPT_PATH=/Titan/code/robohike_ws/src/slam_trajectory_evaluation/evaluation/rpg_trajectory_evaluation
+export Evaluation_Script_Path=/Titan/code/robohike_ws/src/slam_trajectory_evaluation/evaluation/rpg_trajectory_evaluation
 
-python $EVALUATION_SCRIPT_PATH/scripts/add_eval_cfg_recursive.py $Algorithm_Result_Path/ se3 -1
+# add eval_cfg.yaml
+python $Evaluation_Script_Path/scripts/add_eval_cfg_recursive.py $Algorithm_Result_Path/ se3 -1
 
 # evalaution
-python $EVALUATION_SCRIPT_PATH/scripts/analyze_trajectories_PRCV2022.py \
+python $Evaluation_Script_Path/scripts/analyze_trajectories_PRCV2022.py \
 --groundtruth_dir=$Groundtruth_Path \
 --results_dir=$Algorithm_Result_Path \
 --output_dir=$Algorithm_Result_Path \

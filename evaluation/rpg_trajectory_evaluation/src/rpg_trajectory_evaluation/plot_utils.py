@@ -120,3 +120,32 @@ def plot_error_n_dim(ax,
                 errors[:, i],
                 color=colors[i] + '-',
                 label=labels[i])
+
+def plot_trajectory_top_spot(ax, pos, color, name, alpha=1.0, marker='.', markersize=3, zorder=0):
+    ax.grid(ls='--', color='0.7')
+    # pos_0 = pos - pos[0, :]
+    if name is not None:
+        ax.plot(pos[:, 0],
+                pos[:, 1],
+                color=color,
+                linestyle='None',
+                marker=marker,
+                markersize=markersize,
+                alpha=alpha,
+                label=name,
+                markerfacecolor=color,
+                markeredgecolor=color,
+                markeredgewidth=0.5,
+                zorder=zorder)
+    else:
+        ax.plot(pos[:, 0],
+                pos[:, 1],
+                color=color,
+                linestyle='None',
+                marker=marker,
+                markersize=markersize,
+                alpha=alpha,
+                markerfacecolor=color,
+                markeredgecolor=color,
+                markeredgewidth=0.5,
+                zorder=zorder)

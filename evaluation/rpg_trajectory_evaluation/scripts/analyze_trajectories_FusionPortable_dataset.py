@@ -401,7 +401,10 @@ def plot_trajectories(dataset_trajectories_list,
                                    plot_settings['algo_labels'][alg], 1.0)
             print(plot_settings['algo_colors'][alg])
         plt.sca(ax)
-        pu.plot_trajectory_top(ax, p_gt_raw, PALLETE[0], 'Groundtruth', 1.0)
+        pu.plot_trajectory_top(ax, p_gt_raw, PALLETE[0], 'Groundtruth', 1.0, linestyle='--')
+        pu.plot_trajectory_top_spot(ax, p_gt_raw[0, :].reshape(1, -1), PALLETE[5], 'Start Point', 1.0, marker='*', markersize=8.5, zorder=10)
+        pu.plot_trajectory_top_spot(ax, p_gt_raw[-1, :].reshape(1, -1), PALLETE[5], 'End Point', 1.0, marker='^', markersize=7.5, zorder=10)
+
         plt.legend(bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
         fig.tight_layout()
         fig.savefig(output_dir + '/' + dataset_nm + '_trajectory_top' + FORMAT,
