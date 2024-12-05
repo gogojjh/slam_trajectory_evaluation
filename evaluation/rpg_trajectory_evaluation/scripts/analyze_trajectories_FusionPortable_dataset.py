@@ -929,7 +929,8 @@ if __name__ == '__main__':
     print(Fore.RED + ">>> Processing absolute trajectory errors...")
     if args.rmse_table:
         rmse_table = {}
-        rmse_table['values'] = []
+        rmse_table['values_trans_rmse'] = []
+        rmse_table['values_rot_rmse'] = []
         for config_mt_error in config_multierror_list:
             cur_trans_rmse = []
             for mt_error_d in config_mt_error:
@@ -945,7 +946,23 @@ if __name__ == '__main__':
                             ['median'],
                             mt_error_d.abs_errors['rmse_trans_stats']['min'],
                             mt_error_d.abs_errors['rmse_trans_stats']['max']))
-            rmse_table['values'].append(cur_trans_rmse)
+            rmse_table['values_trans_rmse'].append(cur_trans_rmse)
+
+            cur_rot_rmse = []
+            for mt_error_d in config_mt_error:
+                print("> Processing {0}".format(mt_error_d.uid))
+                if args.rmse_median_only or n_trials == 1:
+                    cur_rot_rmse.append("{:3.3f}".format(
+                        mt_error_d.abs_errors['rmse_rot_stats']['median']))
+                else:
+                    cur_rot_rmse.append(
+                        "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
+                            mt_error_d.abs_errors['rmse_rot_stats']['mean'],
+                            mt_error_d.abs_errors['rmse_rot_stats']
+                            ['median'],
+                            mt_error_d.abs_errors['rmse_rot_stats']['min'],
+                            mt_error_d.abs_errors['rmse_rot_stats']['max']))            
+            rmse_table['values_rot_rmse'].append(cur_rot_rmse)
         # RMSE table:
         #              dataset_1 dataset_2 dataset_3
         # algorithm_1
@@ -966,9 +983,14 @@ if __name__ == '__main__':
         if (args.rmse_table_alg_col):
             rmse_table['rows'] = dataset_name
             rmse_table['cols'] = algorithm_name
-            np_array = np.array(rmse_table['values'])
+            
+            np_array = np.array(rmse_table['values_trans_rmse'])
             np_array_transpose = np_array.transpose()
-            rmse_table['values'] = np_array_transpose.tolist()
+            rmse_table['values_trans_rmse'] = np_array_transpose.tolist()
+
+            np_array = np.array(rmse_table['values_rot_rmse'])
+            np_array_transpose = np_array.transpose()
+            rmse_table['values_rot_rmse'] = np_array_transpose.tolist()
         else:
             dataset_name = []
             for d in datasets:
@@ -978,10 +1000,16 @@ if __name__ == '__main__':
         print('\n--- Generating RMSE tables... ---')
 
         res_writer.write_tex_table(
-            rmse_table['values'], rmse_table['rows'], rmse_table['cols'],
+            rmse_table['values_trans_rmse'], rmse_table['rows'], rmse_table['cols'],
             os.path.join(
                 report_result_path,
                 args.computer + '_translation_rmse_' + eval_uid + '.txt'))
+
+        res_writer.write_tex_table(
+            rmse_table['values_rot_rmse'], rmse_table['rows'], rmse_table['cols'],
+            os.path.join(
+                report_result_path,
+                args.computer + '_rotation_rmse_' + eval_uid + '.txt'))
 
     if args.rmse_boxplot and n_trials > 1:
         rmse_plot_alg = [v for v in algorithms]

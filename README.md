@@ -2,8 +2,7 @@
 
 ### Installation
 
-The package is written in python and tested in Ubuntu 16.04 and 18.04.
-<!-- Both `python2` and `python3` are supported. -->
+The package is written in python and tested in Ubuntu 16.04 and 18.04. It has been tested with Python2.7
 
 **Dependencies**: You will need install the following:
 
@@ -19,10 +18,13 @@ The package is written in python and tested in Ubuntu 16.04 and 18.04.
 * `ruamel.yaml` ([install](https://pypi.org/project/ruamel.yaml/)) for [preserving the order in yaml configurations](https://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts)
   ```pip install ruamel.yaml```
 
+* `yaml
+  ```pip install PyYAML```
+
 * if you can not generate the pdf plot file，please check your latex lib.
 
   ```
-  sudo apt install  texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+  sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
   ```
 
 <!-- ### Run the evaluation code
