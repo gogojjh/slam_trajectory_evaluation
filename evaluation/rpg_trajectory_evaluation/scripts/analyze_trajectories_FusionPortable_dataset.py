@@ -947,7 +947,7 @@ if __name__ == '__main__':
                             mt_error_d.abs_errors['rmse_trans_stats']['min'],
                             mt_error_d.abs_errors['rmse_trans_stats']['max']))
             rmse_table['values_trans_rmse'].append(cur_trans_rmse)
-
+            # NOTE(gogojjh): add rotation RMSE
             cur_rot_rmse = []
             for mt_error_d in config_mt_error:
                 print("> Processing {0}".format(mt_error_d.uid))
