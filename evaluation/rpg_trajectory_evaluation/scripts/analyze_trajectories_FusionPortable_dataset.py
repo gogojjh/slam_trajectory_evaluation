@@ -34,7 +34,8 @@ init(autoreset=True)
 rc('font', **{'family': 'serif', 'serif': ['Times'], 'size': 10})
 rc('text', usetex=True)
 FORMAT = '.pdf'
-params = {'axes.titlesize': 12, 'legend.fontsize': 10, 'legend.numpoints': 1}
+params = {'axes.titlesize': 14, 'legend.fontsize': 14,  'legend.numpoints': 1}
+rc('font', **{'size': 14})
 pylab.rcParams.update(params)
 
 def collect_odometry_error_per_dataset(dataset_multierror_list, dataset_names):
@@ -341,6 +342,24 @@ def plot_rmse_per_dataset(algorithm_rmse, dataset_names, algorithm_names,
                 dpi=args.dpi)
     plt.close(fig)
 
+# Helper function to split trajectory into segments where consecutive points are more than threshold apart
+def split_trajectory(traj, threshold=10.0):
+    if len(traj) < 2:
+        return [traj]
+    segments = []
+    current_segment = [traj[0]]
+    for j in range(1, len(traj)):
+        prev_point = traj[j-1]
+        current_point = traj[j]
+        distance = np.linalg.norm(current_point - prev_point)
+        if distance > threshold:
+            segments.append(np.array(current_segment))
+            current_segment = [current_point]
+        else:
+            current_segment.append(current_point)
+    segments.append(np.array(current_segment))
+    
+    return segments
 
 def plot_trajectories(dataset_trajectories_list,
                       dataset_names,
@@ -366,7 +385,7 @@ def plot_trajectories(dataset_trajectories_list,
         print("Plotting {0}...".format(dataset_nm))
 
         # plot trajectory
-        fig = plt.figure(figsize=(6, 5.5))
+        fig = plt.figure(figsize=(7.5, 6.0))
         ax = fig.add_subplot(111,
                              aspect='equal',
                              xlabel='X [m]',
@@ -388,7 +407,8 @@ def plot_trajectories(dataset_trajectories_list,
                                        'Groundtruth', 1.0)
                 if plot_aligned:
                     pu.plot_aligned_top(ax_i, p_es_0[alg], p_gt_0[alg], -1)
-                plt.legend(bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
+                # plt.legend(bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
+                plt.legend(loc="upper right")
                 fig_i.tight_layout()
                 fig_i.savefig(output_dir + '/' + dataset_nm +
                               '_trajectory_top_' +
@@ -396,16 +416,31 @@ def plot_trajectories(dataset_trajectories_list,
                               bbox_inches="tight",
                               dpi=args.dpi)
                 plt.close(fig_i)
-            pu.plot_trajectory_top(ax, p_es_0[alg],
-                                   plot_settings['algo_colors'][alg],
-                                   plot_settings['algo_labels'][alg], 1.0)
-            print(plot_settings['algo_colors'][alg])
-        plt.sca(ax)
-        pu.plot_trajectory_top(ax, p_gt_raw, PALLETE[0], 'Groundtruth', 1.0, linestyle='--')
-        pu.plot_trajectory_top_spot(ax, p_gt_raw[0, :].reshape(1, -1), PALLETE[5], 'Start Point', 1.0, marker='*', markersize=8.5, zorder=10)
-        pu.plot_trajectory_top_spot(ax, p_gt_raw[-1, :].reshape(1, -1), PALLETE[5], 'End Point', 1.0, marker='^', markersize=7.5, zorder=10)
 
-        plt.legend(bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
+            # NOTE(gogojjh): handle the discontinuity of multiple subtrajectories
+            print(plot_settings['algo_colors'][alg])
+            est_segments_combined = split_trajectory(p_es_0[alg])
+            for i, seg in enumerate(est_segments_combined):
+                label = plot_settings['algo_labels'][alg] if i == 0 else None
+                pu.plot_trajectory_top(ax, seg, plot_settings['algo_colors'][alg], label, 1.0)
+
+        # NOTE(gogojjh): Reverse x and y coordinates for ground truth trajectory
+        # ax.invert_xaxis()
+        # ax.invert_yaxis()
+        plt.sca(ax)
+        gt_raw_segments = split_trajectory(p_gt_raw)
+        for i, seg in enumerate(gt_raw_segments):
+            label = 'Groundtruth' if i == 0 else None
+            pu.plot_trajectory_top(ax, seg, PALLETE[0], label, 1.0, linestyle='--')
+        # pu.plot_trajectory_top_spot(ax, p_gt_raw[0, :].reshape(1, -1), PALLETE[5], 'Start Point', 1.0, marker='*', markersize=8.5, zorder=10)
+        # pu.plot_trajectory_top_spot(ax, p_gt_raw[-1, :].reshape(1, -1), PALLETE[5], 'End Point', 1.0, marker='^', markersize=7.5, zorder=10)
+
+        ##### Option 1
+        # plt.legend(bbox_to_anchor=(0.85, 1), loc=2, borderaxespad=0.)
+        ##### Option 2
+        plt.legend(loc='upper right', borderaxespad=0.)
+        ##### Option 3
+        # plt.legend(loc='upper left')
         fig.tight_layout()
         fig.savefig(output_dir + '/' + dataset_nm + '_trajectory_top' + FORMAT,
                     bbox_inches="tight",
@@ -773,11 +808,11 @@ if __name__ == '__main__':
                 args.results_dir, config_i, args.computer, 'traj')
             est_traj_path = os.path.join(
                 trace_dir, '{}.{}'.format(d, kFnExt))
-            print('Est_Traj_path: {}'.format(est_traj_path))
+            print('Exist Est_Traj_path: {}'.format(est_traj_path))
 
             gt_dir = os.path.join(args.groundtruth_dir, 'traj')
             gt_traj_path = os.path.join(gt_dir, '{}.{}'.format(d, kFnExt))
-            print('GT_Traj_path: {}'.format(gt_traj_path))
+            print('Exist GT_Traj_path: {}'.format(gt_traj_path))
 
             if not os.path.exists(est_traj_path):
                 print('Not exist est_traj: {}'.format(est_traj_path))
@@ -788,8 +823,8 @@ if __name__ == '__main__':
                 print('Not exist gt_traj: {}'.format(gt_traj_path))
                 remove_key.append(d)
                 break
+    
     print('remove keys: {}'.format(remove_key))
-    print(dir(datasets))
     for v in remove_key:
         datasets.remove(v)
         del datasets_platforms[v]
