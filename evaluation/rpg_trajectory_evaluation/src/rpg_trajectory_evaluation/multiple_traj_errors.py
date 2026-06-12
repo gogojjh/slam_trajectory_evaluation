@@ -136,6 +136,8 @@ class MulTrajError(object):
                    fmt='%i')
 
     def cache_current_error(self):
+        if not self.align_str:
+            return
         if self.abs_errors:
             with open(
                     os.path.join(
