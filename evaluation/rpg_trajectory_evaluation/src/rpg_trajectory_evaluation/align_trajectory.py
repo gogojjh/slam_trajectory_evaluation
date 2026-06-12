@@ -54,7 +54,7 @@ def align_umeyama(model, data, known_scale=False, yaw_only=False):
     # correlation
     C = 1.0 / n * np.dot(model_zerocentered.transpose(), data_zerocentered)
     sigma2 = 1.0 / n * np.multiply(data_zerocentered, data_zerocentered).sum()
-    U_svd, D_svd, V_svd = np.linalg.linalg.svd(C)
+    U_svd, D_svd, V_svd = np.linalg.svd(C)
     D_svd = np.diag(D_svd)
     V_svd = np.transpose(V_svd)
 

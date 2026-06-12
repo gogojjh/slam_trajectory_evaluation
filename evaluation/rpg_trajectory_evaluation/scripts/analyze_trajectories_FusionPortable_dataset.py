@@ -825,6 +825,7 @@ if __name__ == '__main__':
                 break
     
     print('remove keys: {}'.format(remove_key))
+    datasets = list(datasets)
     for v in remove_key:
         datasets.remove(v)
         del datasets_platforms[v]
