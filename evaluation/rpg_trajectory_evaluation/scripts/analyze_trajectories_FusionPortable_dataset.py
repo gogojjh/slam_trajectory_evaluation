@@ -972,8 +972,12 @@ if __name__ == '__main__':
             for mt_error_d in config_mt_error:
                 print("> Processing {0}".format(mt_error_d.uid))
                 if args.rmse_median_only or n_trials == 1:
-                    cur_trans_rmse.append("{:3.3f}".format(
-                        mt_error_d.abs_errors['rmse_trans_stats']['median']))
+                    if 'rmse_trans_stats' in mt_error_d.abs_errors:
+                        cur_trans_rmse.append("{:3.3f}".format(
+                            mt_error_d.abs_errors['rmse_trans_stats']['median']))
+                    elif 'rmse_trans' in mt_error_d.abs_errors:
+                        cur_trans_rmse.append("{:3.3f}".format(
+                            mt_error_d.abs_errors['rmse_trans']))
                 else:
                     cur_trans_rmse.append(
                         "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
@@ -988,8 +992,12 @@ if __name__ == '__main__':
             for mt_error_d in config_mt_error:
                 print("> Processing {0}".format(mt_error_d.uid))
                 if args.rmse_median_only or n_trials == 1:
-                    cur_rot_rmse.append("{:3.3f}".format(
-                        mt_error_d.abs_errors['rmse_rot_stats']['median']))
+                    if 'rmse_rot_stats' in mt_error_d.abs_errors:
+                        cur_rot_rmse.append("{:3.3f}".format(
+                            mt_error_d.abs_errors['rmse_rot_stats']['median']))
+                    elif 'rmse_rot' in mt_error_d.abs_errors:
+                        cur_rot_rmse.append("{:3.3f}".format(
+                            mt_error_d.abs_errors['rmse_rot']))
                 else:
                     cur_rot_rmse.append(
                         "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
