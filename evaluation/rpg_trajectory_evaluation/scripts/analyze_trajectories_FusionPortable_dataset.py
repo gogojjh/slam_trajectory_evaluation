@@ -1098,7 +1098,7 @@ if __name__ == '__main__':
                     res_writer.compute_statistics(cur_errors)['mean']))
             rel_err_table['values'].append(alg_aver_rel)
         rel_err_table['cols'] = rel_err_labels
-        rel_err_table['rows'] = algorithms
+        rel_err_table['rows'] = list(algorithms)
         res_writer.write_tex_table(
             rel_err_table['values'], rel_err_table['rows'],
             rel_err_table['cols'],
