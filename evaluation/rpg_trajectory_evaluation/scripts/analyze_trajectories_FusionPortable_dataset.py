@@ -975,9 +975,9 @@ if __name__ == '__main__':
                     if 'rmse_trans_stats' in mt_error_d.abs_errors:
                         cur_trans_rmse.append("{:3.3f}".format(
                             mt_error_d.abs_errors['rmse_trans_stats']['median']))
-                    elif 'rmse_trans' in mt_error_d.abs_errors:
-                        cur_trans_rmse.append("{:3.3f}".format(
-                            mt_error_d.abs_errors['rmse_trans']))
+                    elif mt_error_d.abs_errors.get('rmse_trans'):
+                        v = mt_error_d.abs_errors['rmse_trans']
+                        cur_trans_rmse.append("{:3.3f}".format(v if np.isscalar(v) else v[-1]))
                 else:
                     cur_trans_rmse.append(
                         "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
@@ -995,9 +995,9 @@ if __name__ == '__main__':
                     if 'rmse_rot_stats' in mt_error_d.abs_errors:
                         cur_rot_rmse.append("{:3.3f}".format(
                             mt_error_d.abs_errors['rmse_rot_stats']['median']))
-                    elif 'rmse_rot' in mt_error_d.abs_errors:
-                        cur_rot_rmse.append("{:3.3f}".format(
-                            mt_error_d.abs_errors['rmse_rot']))
+                    elif mt_error_d.abs_errors.get('rmse_rot'):
+                        v = mt_error_d.abs_errors['rmse_rot']
+                        cur_rot_rmse.append("{:3.3f}".format(v if np.isscalar(v) else v[-1]))
                 else:
                     cur_rot_rmse.append(
                         "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
