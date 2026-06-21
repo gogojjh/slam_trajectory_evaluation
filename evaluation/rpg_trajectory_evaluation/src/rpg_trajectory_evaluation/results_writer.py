@@ -56,10 +56,11 @@ def write_tex_table(list_values, rows, cols, outfn):
     The value should be string of desired format
     '''
 
-    assert len(rows) >= 1
-    assert len(cols) >= 1
-
     with open(outfn, 'w') as f:
+        if len(rows) < 1 or len(cols) < 1:
+            f.write('No valid rows or columns to write.\n')
+            return
+
         # write header
         f.write('               & ')  # 18, 10
         for col_i in cols[:-1]:

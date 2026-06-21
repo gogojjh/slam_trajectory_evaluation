@@ -788,8 +788,52 @@ if __name__ == '__main__':
         rel_e_distances, rel_e_perc = \
         parse_config_file(config_fn, args.sort_names)
 
-    # create the result path
-    all_algorithm = '_'.join(algorithms)
+    ####################
+    # check the existence of estimated and GT
+    dataset_has_gt = {}
+    available = {}
+    for d in datasets:
+        available[d] = {}
+        gt_dir = os.path.join(args.groundtruth_dir, 'traj')
+        gt_traj_path = os.path.join(gt_dir, '{}.{}'.format(d, kFnExt))
+        dataset_has_gt[d] = os.path.exists(gt_traj_path)
+        print('Exist GT_Traj_path: {}'.format(gt_traj_path))
+        if not dataset_has_gt[d]:
+            print('Not exist gt_traj: {}'.format(gt_traj_path))
+
+        for config_i in algorithms:
+            trace_dir = os.path.join(
+                args.results_dir, config_i, args.computer, 'traj')
+            est_traj_path = os.path.join(
+                trace_dir, '{}.{}'.format(d, kFnExt))
+            print('Exist Est_Traj_path: {}'.format(est_traj_path))
+            if not os.path.exists(est_traj_path):
+                print('Not exist est_traj: {}'.format(est_traj_path))
+                available[d][config_i] = False
+            else:
+                available[d][config_i] = True
+
+    remove_key = [
+        d for d in datasets
+        if not dataset_has_gt[d] or not any(available[d].values())
+    ]
+    print('remove keys: {}'.format(remove_key))
+    datasets = list(datasets)
+    for v in remove_key:
+        datasets.remove(v)
+        del datasets_platforms[v]
+        del datasets_labels[v]
+        del datasets_titles[v]
+
+    remove_algorithms = [
+        alg for alg in algorithms
+        if not any(available[d].get(alg, False) for d in datasets)
+    ]
+    print('remove algorithms: {}'.format(remove_algorithms))
+    algorithms = [alg for alg in algorithms if alg not in remove_algorithms]
+
+    # create the result path after filtering missing trajectories
+    all_algorithm = '_'.join(algorithms) if algorithms else 'empty'
     report_result_path = os.path.join(
         output_dir, 'report_benchmark_{}'.format(all_algorithm))
     print('Create result path: {}'.format(report_result_path))
@@ -798,39 +842,6 @@ if __name__ == '__main__':
     #     shutil.rmtree(report_result_path)
     # os.makedirs(report_result_path)
     shutil.copy2(config_fn, report_result_path)
-
-    ####################
-    # check the existence of estimated and GT
-    remove_key = []
-    for d in datasets:
-        for config_i in algorithms:
-            trace_dir = os.path.join(
-                args.results_dir, config_i, args.computer, 'traj')
-            est_traj_path = os.path.join(
-                trace_dir, '{}.{}'.format(d, kFnExt))
-            print('Exist Est_Traj_path: {}'.format(est_traj_path))
-
-            gt_dir = os.path.join(args.groundtruth_dir, 'traj')
-            gt_traj_path = os.path.join(gt_dir, '{}.{}'.format(d, kFnExt))
-            print('Exist GT_Traj_path: {}'.format(gt_traj_path))
-
-            if not os.path.exists(est_traj_path):
-                print('Not exist est_traj: {}'.format(est_traj_path))
-                remove_key.append(d)
-                break
-
-            if not os.path.exists(gt_traj_path):
-                print('Not exist gt_traj: {}'.format(gt_traj_path))
-                remove_key.append(d)
-                break
-    
-    print('remove keys: {}'.format(remove_key))
-    datasets = list(datasets)
-    for v in remove_key:
-        datasets.remove(v)
-        del datasets_platforms[v]
-        del datasets_labels[v]
-        del datasets_titles[v]
 
     datasets_res_dir = {}
     for d in datasets:
@@ -890,6 +901,7 @@ if __name__ == '__main__':
     # organize by configuration
     config_trajectories_list = []
     config_multierror_list = []
+    config_dataset_list = []
     dataset_boxdist_map = {}
     for d in datasets:
         dataset_boxdist_map[d] = rel_e_distances
@@ -897,7 +909,12 @@ if __name__ == '__main__':
     for config_i in algorithms:
         cur_trajectories_i = []
         cur_mulierror_i = []
+        cur_datasets_i = []
         for d in datasets:
+            if not available[d].get(config_i, False):
+                print(Fore.YELLOW +
+                      "--- Skipping {0}-{1}: missing estimated trajectory ---".format(config_i, d))
+                continue
             print(Fore.RED +
                     "--- Processing {0}-{1}... ---".format(config_i, d))
 
@@ -947,66 +964,72 @@ if __name__ == '__main__':
             mt_error.dataset = d
             cur_trajectories_i.append(traj_list)
             cur_mulierror_i.append(mt_error)
+            cur_datasets_i.append(d)
         config_trajectories_list.append(cur_trajectories_i)
         config_multierror_list.append(cur_mulierror_i)
+        config_dataset_list.append(cur_datasets_i)
 
     # organize by dataset name
     dataset_trajectories_list = []
     dataset_multierror_list = []
     for ds_idx, dataset_nm in enumerate(datasets):
-        dataset_trajs = [v[ds_idx] for v in config_trajectories_list]
+        dataset_trajs = []
+        dataset_multierrors = []
+        for alg_idx, config_datasets in enumerate(config_dataset_list):
+            if dataset_nm not in config_datasets:
+                continue
+            config_ds_idx = config_datasets.index(dataset_nm)
+            dataset_trajs.append(config_trajectories_list[alg_idx][config_ds_idx])
+            dataset_multierrors.append(config_multierror_list[alg_idx][config_ds_idx])
         dataset_trajectories_list.append(dataset_trajs)
-        dataset_multierrors = [v[ds_idx] for v in config_multierror_list]
         dataset_multierror_list.append(dataset_multierrors)
 
     print("#####################################")
     print(">>> Analyze different error types...")
     print("#####################################")
+    has_sparse_results = any(
+        len(config_datasets) != len(datasets)
+        for config_datasets in config_dataset_list
+    )
     print(Fore.RED + ">>> Processing absolute trajectory errors...")
     if args.rmse_table:
         rmse_table = {}
-        rmse_table['values_trans_rmse'] = []
-        rmse_table['values_rot_rmse'] = []
-        for config_mt_error in config_multierror_list:
-            cur_trans_rmse = []
+        trans_rmse_by_pair = {}
+        rot_rmse_by_pair = {}
+        for alg_idx, config_mt_error in enumerate(config_multierror_list):
+            config_i = algorithms[alg_idx]
             for mt_error_d in config_mt_error:
                 print("> Processing {0}".format(mt_error_d.uid))
+                trans_value = '-'
+                rot_value = '-'
                 if args.rmse_median_only or n_trials == 1:
                     if 'rmse_trans_stats' in mt_error_d.abs_errors:
-                        cur_trans_rmse.append("{:3.3f}".format(
-                            mt_error_d.abs_errors['rmse_trans_stats']['median']))
+                        trans_value = "{:3.3f}".format(
+                            mt_error_d.abs_errors['rmse_trans_stats']['median'])
                     elif mt_error_d.abs_errors.get('rmse_trans'):
                         v = mt_error_d.abs_errors['rmse_trans']
-                        cur_trans_rmse.append("{:3.3f}".format(v if np.isscalar(v) else v[-1]))
-                else:
-                    cur_trans_rmse.append(
-                        "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
-                            mt_error_d.abs_errors['rmse_trans_stats']['mean'],
-                            mt_error_d.abs_errors['rmse_trans_stats']
-                            ['median'],
-                            mt_error_d.abs_errors['rmse_trans_stats']['min'],
-                            mt_error_d.abs_errors['rmse_trans_stats']['max']))
-            rmse_table['values_trans_rmse'].append(cur_trans_rmse)
-            # NOTE(gogojjh): add rotation RMSE
-            cur_rot_rmse = []
-            for mt_error_d in config_mt_error:
-                print("> Processing {0}".format(mt_error_d.uid))
-                if args.rmse_median_only or n_trials == 1:
+                        trans_value = "{:3.3f}".format(v if np.isscalar(v) else v[-1])
                     if 'rmse_rot_stats' in mt_error_d.abs_errors:
-                        cur_rot_rmse.append("{:3.3f}".format(
-                            mt_error_d.abs_errors['rmse_rot_stats']['median']))
+                        rot_value = "{:3.3f}".format(
+                            mt_error_d.abs_errors['rmse_rot_stats']['median'])
                     elif mt_error_d.abs_errors.get('rmse_rot'):
                         v = mt_error_d.abs_errors['rmse_rot']
-                        cur_rot_rmse.append("{:3.3f}".format(v if np.isscalar(v) else v[-1]))
+                        rot_value = "{:3.3f}".format(v if np.isscalar(v) else v[-1])
                 else:
-                    cur_rot_rmse.append(
+                    trans_value = \
+                        "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
+                            mt_error_d.abs_errors['rmse_trans_stats']['mean'],
+                            mt_error_d.abs_errors['rmse_trans_stats']['median'],
+                            mt_error_d.abs_errors['rmse_trans_stats']['min'],
+                            mt_error_d.abs_errors['rmse_trans_stats']['max'])
+                    rot_value = \
                         "{:3.3f}, {:3.3f} ({:3.3f} - {:3.3f})".format(
                             mt_error_d.abs_errors['rmse_rot_stats']['mean'],
-                            mt_error_d.abs_errors['rmse_rot_stats']
-                            ['median'],
+                            mt_error_d.abs_errors['rmse_rot_stats']['median'],
                             mt_error_d.abs_errors['rmse_rot_stats']['min'],
-                            mt_error_d.abs_errors['rmse_rot_stats']['max']))            
-            rmse_table['values_rot_rmse'].append(cur_rot_rmse)
+                            mt_error_d.abs_errors['rmse_rot_stats']['max'])
+                trans_rmse_by_pair[(config_i, mt_error_d.dataset)] = trans_value
+                rot_rmse_by_pair[(config_i, mt_error_d.dataset)] = rot_value
         # RMSE table:
         #              dataset_1 dataset_2 dataset_3
         # algorithm_1
@@ -1027,20 +1050,28 @@ if __name__ == '__main__':
         if (args.rmse_table_alg_col):
             rmse_table['rows'] = dataset_name
             rmse_table['cols'] = algorithm_name
-            
-            np_array = np.array(rmse_table['values_trans_rmse'])
-            np_array_transpose = np_array.transpose()
-            rmse_table['values_trans_rmse'] = np_array_transpose.tolist()
-
-            np_array = np.array(rmse_table['values_rot_rmse'])
-            np_array_transpose = np_array.transpose()
-            rmse_table['values_rot_rmse'] = np_array_transpose.tolist()
+            rmse_table['values_trans_rmse'] = [
+                [trans_rmse_by_pair.get((alg, d), '-') for alg in algorithms]
+                for d in datasets
+            ]
+            rmse_table['values_rot_rmse'] = [
+                [rot_rmse_by_pair.get((alg, d), '-') for alg in algorithms]
+                for d in datasets
+            ]
         else:
             dataset_name = []
             for d in datasets:
                 dataset_name.append(datasets_labels[d])
             rmse_table['rows'] = algorithm_name
             rmse_table['cols'] = dataset_name
+            rmse_table['values_trans_rmse'] = [
+                [trans_rmse_by_pair.get((alg, d), '-') for d in datasets]
+                for alg in algorithms
+            ]
+            rmse_table['values_rot_rmse'] = [
+                [rot_rmse_by_pair.get((alg, d), '-') for d in datasets]
+                for alg in algorithms
+            ]
         print('\n--- Generating RMSE tables... ---')
 
         res_writer.write_tex_table(
@@ -1065,7 +1096,10 @@ if __name__ == '__main__':
     print(Fore.GREEN + "<<< ...processing absolute trajectory errors done.")
 
     print(Fore.RED + ">>> Collecting odometry errors per dataset...")
-    if args.odometry_error_per_dataset:
+    if args.odometry_error_per_dataset and has_sparse_results:
+        print(Fore.YELLOW +
+              "Skip per-dataset odometry plots because some algorithm/dataset trajectories are missing.")
+    elif args.odometry_error_per_dataset:
         dataset_rel_err = {}
         dataset_rel_err = collect_odometry_error_per_dataset(
             dataset_multierror_list, datasets)
@@ -1076,7 +1110,10 @@ if __name__ == '__main__':
     print(Fore.GREEN + "<<< .... processing odometry errors done.\n")
 
     print(Fore.RED + ">>> Collecting odometry errors per algorithms...")
-    if args.overall_odometry_error:
+    if args.overall_odometry_error and has_sparse_results:
+        print(Fore.YELLOW +
+              "Skip overall odometry plots because some algorithm/dataset trajectories are missing.")
+    elif args.overall_odometry_error:
         rel_err_names = ['rel_trans_perc', 'rel_rot_deg_per_m']
         rel_err_labels = ['Translation (\%)', 'Rotation (deg/meter)']
         all_odo_err = collect_odometry_error_per_algorithm(
@@ -1113,7 +1150,10 @@ if __name__ == '__main__':
             os.path.join(report_result_path,
                             args.computer + '_rel_err_' + eval_uid + '.txt'))
 
-    if args.plot_trajectories:
+    if args.plot_trajectories and has_sparse_results:
+        print(Fore.YELLOW +
+              "Skip trajectory plots because some algorithm/dataset trajectories are missing.")
+    elif args.plot_trajectories:
         print(Fore.MAGENTA +
                 '--- Plotting trajectory top and side view to {}'.format(datasets_res_dir))
         plot_trajectories(dataset_trajectories_list,
@@ -1125,7 +1165,10 @@ if __name__ == '__main__':
                           plot_aligned=args.plot_aligned,
                           plot_traj_per_alg=args.plot_traj_per_alg)
 
-    if args.write_time_statistics:
+    if args.write_time_statistics and has_sparse_results:
+        print(Fore.YELLOW +
+              "Skip time statistics because some algorithm/dataset trajectories are missing.")
+    elif args.write_time_statistics:
         dataset_alg_t_stats = []
         for didx, d in enumerate(datasets):
             cur_d_time_stats = {}
