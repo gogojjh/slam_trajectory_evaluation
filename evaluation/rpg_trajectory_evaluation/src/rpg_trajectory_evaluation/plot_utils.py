@@ -9,10 +9,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import rc
+from matplotlib import rc, font_manager
 
 rc('font', **{'family': 'serif', 'serif': ['Cardo']})
-rc('text', usetex=True)
+try:
+    font_manager.findfont('Cardo', fallback_to_default=False)
+    rc('text', usetex=True)
+except Exception:
+    print('TeX/Cardo font not available. Falling back to usetex=False')
+    rc('text', usetex=False)
 
 FORMAT = '.pdf'
 

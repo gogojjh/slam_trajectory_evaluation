@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from matplotlib import pylab, colors
+from matplotlib import pylab, colors, font_manager
 import os
 import argparse
 from ruamel.yaml import YAML
@@ -32,7 +32,12 @@ from setting_color import PALLETE
 
 init(autoreset=True)
 rc('font', **{'family': 'serif', 'serif': ['Times'], 'size': 10})
-rc('text', usetex=True)
+try:
+    font_manager.findfont('Times New Roman', fallback_to_default=False)
+    rc('text', usetex=True)
+except Exception:
+    print('TeX/Times font not available. Falling back to usetex=False')
+    rc('text', usetex=False)
 FORMAT = '.pdf'
 params = {'axes.titlesize': 14, 'legend.fontsize': 14,  'legend.numpoints': 1}
 rc('font', **{'size': 14})

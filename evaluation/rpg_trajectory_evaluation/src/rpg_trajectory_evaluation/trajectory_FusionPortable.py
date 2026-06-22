@@ -298,6 +298,7 @@ class Trajectory_FusionPortable:
 
             self.abs_errors['abs_e_scale_perc'] = e_scale_perc
             self.abs_errors['abs_e_scale_stats'] = stats_scale
+            self.success = True
             print(Fore.GREEN + '...RMSE calculated.')
         return
 

@@ -41,15 +41,15 @@ class MulTrajError(object):
             self.abs_errors['rmse_scale'].append(
                 (traj.abs_errors['abs_e_scale_stats'])['rmse'])
 
-        if not self.rel_errors.keys():
-            # first run
+        if not traj.rel_errors:
+            pass
+        elif not self.rel_errors.keys():
             for d in traj.preset_boxplot_distances:
                 e = traj.rel_errors[d]
                 self.rel_errors[d] = {}
                 for et in kRelMetrics:
                     (self.rel_errors[d])[et] = e[et]
         else:
-            # append
             for d in traj.preset_boxplot_distances:
                 e = traj.rel_errors[d]
                 assert d in self.rel_errors, "Could not find the distances"
@@ -94,13 +94,14 @@ class MulTrajError(object):
                 np.array(self.abs_errors[et]))
 
         self.overall_rel_errors = {}
-        for et in kRelMetrics:
-            values = []
-            for d in self.rel_errors:
-                self.rel_errors[d][et + '_stats'] = rw.compute_statistics(
-                    self.rel_errors[d][et])
-                values.extend(self.rel_errors[d][et].tolist())
-            self.overall_rel_errors[et] = rw.compute_statistics(values)
+        if self.rel_errors:
+            for et in kRelMetrics:
+                values = []
+                for d in self.rel_errors:
+                    self.rel_errors[d][et + '_stats'] = rw.compute_statistics(
+                        self.rel_errors[d][et])
+                    values.extend(self.rel_errors[d][et].tolist())
+                self.overall_rel_errors[et] = rw.compute_statistics(values)
 
     def saveErrors(self):
         if self.n_traj == 0:
@@ -115,20 +116,21 @@ class MulTrajError(object):
                              'mt_' + et + '_all_' + self.align_str + '.txt'),
                 np.array(self.abs_errors[et]))
 
-        for dist in self.rel_errors:
-            cur_err = self.rel_errors[dist]
-            dist_str = "{:3.1f}".format(dist).replace('.', '_')
-            dist_fn = os.path.join(self.save_results_dir,
-                                   'mt_rel_err_' + dist_str + '.yaml')
-            for et, label in zip(kRelMetrics, kRelMetricLables):
-                rw.update_and_save_stats(cur_err[et + '_stats'], label,
-                                         dist_fn)
+        if self.rel_errors:
+            for dist in self.rel_errors:
+                cur_err = self.rel_errors[dist]
+                dist_str = "{:3.1f}".format(dist).replace('.', '_')
+                dist_fn = os.path.join(self.save_results_dir,
+                                       'mt_rel_err_' + dist_str + '.yaml')
+                for et, label in zip(kRelMetrics, kRelMetricLables):
+                    rw.update_and_save_stats(cur_err[et + '_stats'], label,
+                                             dist_fn)
 
-        overall_rel_fn = os.path.join(self.save_results_dir,
-                                      'mt_rel_err_overall' + '.yaml')
-        for et, label in zip(kRelMetrics, kRelMetricLables):
-            rw.update_and_save_stats(self.overall_rel_errors[et], label,
-                                     overall_rel_fn)
+            overall_rel_fn = os.path.join(self.save_results_dir,
+                                          'mt_rel_err_overall' + '.yaml')
+            for et, label in zip(kRelMetrics, kRelMetricLables):
+                rw.update_and_save_stats(self.overall_rel_errors[et], label,
+                                         overall_rel_fn)
 
         np.savetxt(os.path.join(self.save_results_dir,
                                 'mt_success_indices' + '.txt'),
@@ -136,8 +138,6 @@ class MulTrajError(object):
                    fmt='%i')
 
     def cache_current_error(self):
-        if not self.align_str:
-            return
         if self.abs_errors:
             with open(
                     os.path.join(
