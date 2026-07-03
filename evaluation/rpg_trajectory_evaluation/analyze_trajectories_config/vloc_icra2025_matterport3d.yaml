@@ -1,0 +1,61 @@
+Datasets:
+  17DRP5sb8fy_seq0:
+    platform: mobile_robot
+    label: 17DRP5sb8fy\_Seq\_0
+    date: 00000000
+    title: 17DRP5sb8fy\_Seq\_0
+  17DRP5sb8fy_seq1:
+    platform: mobile_robot
+    label: 17DRP5sb8fy\_Seq\_1
+    date: 00000000
+    title: 17DRP5sb8fy\_Seq\_1
+  17DRP5sb8fy_seq2:
+    platform: mobile_robot
+    label: 17DRP5sb8fy\_Seq\_2
+    date: 00000000
+    title: 17DRP5sb8fy\_Seq\_2
+  EDJbREhghzL_seq0:
+    platform: mobile_robot
+    label: EDJbREhghzL\_Seq\_0
+    date: 00000000
+    title: EDJbREhghzL\_Seq\_0
+  EDJbREhghzL_seq1:
+    platform: mobile_robot
+    label: EDJbREhghzL\_Seq\_1
+    date: 00000000
+    title: EDJbREhghzL\_Seq\_1
+  EDJbREhghzL_seq2:
+    platform: mobile_robot
+    label: EDJbREhghzL\_Seq\_2
+    date: 00000000
+    title: EDJbREhghzL\_Seq\_2
+  B6ByNegPMK_seq0:
+    platform: mobile_robot
+    label: B6ByNegPMK\_Seq\_0
+    date: 00000000
+    title: B6ByNegPMK\_Seq\_0
+  B6ByNegPMK_seq1:
+    platform: mobile_robot
+    label: B6ByNegPMK\_Seq\_1
+    date: 00000000
+    title: B6ByNegPMK\_Seq\_1
+  B6ByNegPMK_seq2:
+    platform: mobile_robot
+    label: B6ByNegPMK\_Seq\_2
+    date: 00000000
+    title: B6ByNegPMK\_Seq\_2   
+Algorithms:
+  matterport_depth_reg:
+    fn: depth_reg
+    label: DepthReg
+  matterport_vloc:
+    fn: vloc
+    label: DepthRegVLoc
+  matterport_pose_fusion:
+    fn: pose_fusion
+    label: DepthRegPoseFusion
+  matterport_pose_fusion_opt:
+    fn: pose_fusion_opt
+    label: DepthRegPoseFusionOpt
+RelDistances: []   # used to specify the sub-trajectory lengths in the relative error
+RelDistancePercentages: []

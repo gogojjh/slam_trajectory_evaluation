@@ -1,0 +1,53 @@
+Datasets:
+  handheld_room00:
+    platform: handheld
+    label: Handheld\_Room\_00
+    date: 20230520
+    title: Handheld\_Room\_00
+  ugv_campus00:
+    platform: ugv
+    label: UGV\_Campus\_00
+    date: 20230609
+    title: UGV\_Campus\_00
+  vehicle_campus00:
+    platform: vehicle
+    label: Vehicle\_Campus\_00
+    date: 20230620
+    title: Vehicle\_Campus\_00
+Algorithms:
+  # vinsfusionvio:
+  #   fn: vinsfusionvio
+  #   label: VINS-Fusion
+  # vinsfusion-stereovio-lc:
+  #   fn: vinsfusion-stereovio-lc
+  #   label: VINS-Fusion-Stereo-VIO(LC)
+    # orbslam2:
+  #   fn: orbslam2
+  #   label: ORB-SLAM2
+  # orbslam3-stereo:
+  #   fn: orbslam3-stereo
+  #   label: ORB-SLAM3-Stereo(LC)
+  # orbslam3-stereovio-lc:
+  #   fn: orbslam3-stereovio-lc
+  #   label: ORB-SLAM3-Stereo-VIO(LC)
+  # esvo:
+  #   fn: esvo
+  #   label: ESVO
+  # aloam:
+  #   fn: aloam
+  #   label: A-LOAM
+  # liomapping:
+  #   fn: liomapping
+  #   label: LIO-Mapping
+  # liosam: 
+  #   fn: liosam
+  #   label: LIO-SAM
+  fastlio2:
+    fn: fastlio2
+    label: Fast-LIO2
+  # r3live:
+  #   fn: r3live
+  #   label: R3LIVE
+RelDistances: []   # used to specify the sub-trajectory lengths in the relative error
+RelDistancePercentages: []
+

@@ -1,0 +1,168 @@
+Datasets:
+  # UCL_Campus
+  ucl_campus_aria_s00000_in:
+    platform: mobile_robot
+    label: UCL\_Campus\_S00000\_in
+    date: 00000000
+    title: UCL\_Campus\_S00000\_in
+  # ucl_campus_aria_s00000_r0:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r0
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r0
+  # ucl_campus_aria_s00000_r1:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r1
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r1
+  # ucl_campus_aria_s00000_r2:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r2
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r2
+  # ucl_campus_aria_s00000_r3:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r3
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r3
+  # ucl_campus_aria_s00000_r4:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r4
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r4
+  # ucl_campus_aria_s00000_r5:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r5
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r5
+  # ucl_campus_aria_s00000_r6:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r6
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r6
+  # ucl_campus_aria_s00000_r7:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r7
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r7
+  # ucl_campus_aria_s00000_r8:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00000\_r8
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00000\_r8
+  # ucl_campus_aria_s00003_exp_culling_in:
+  #   platform: mobile_robot
+  #   label: UCL\_Campus\_S00003\_Culling\_in
+  #   date: 00000000
+  #   title: UCL\_Campus\_S00003\_Culling\_in
+  # HKUST
+  hkust_campus_s00000_in:
+    platform: mobile_robot
+    label: HKUST\_Campus\_S00000\_in
+    date: 00000000
+    title: HKUST\_Campus\_S00000\_in
+  # hkust_campus_s00000_r0:
+  #   platform: mobile_robot
+  #   label: HKUST\_Campus\_S00000\_r0
+  #   date: 00000000
+  #   title: HKUST\_Campus\_S00000\_r0
+  # hkust_campus_s00000_r1:
+  #   platform: mobile_robot
+  #   label: HKUST\_Campus\_S00000\_r1
+  #   date: 00000000
+  #   title: HKUST\_Campus\_S00000\_r1
+  # Vineyard
+  vineyard_s00000_in:
+    platform: mobile_robot
+    label: Vineyard\_S00000\_in
+    date: 00000000
+    title: Vineyard\_S00000\_in
+  # vineyard_s00000_r0:
+  #   platform: mobile_robot
+  #   label: Vineyard\_S00000\_r0
+  #   date: 00000000
+  #   title: Vineyard\_S00000\_r0
+  # vineyard_s00000_r1:
+  #   platform: mobile_robot
+  #   label: Vineyard\_S00000\_r1
+  #   date: 00000000
+  #   title: Vineyard\_S00000\_r1
+  # 360loc
+  # 360loc_s00000_atrium_in:
+  #   platform: mobile_robot
+  #   label: 360loc\_S00000\_atrium\_in
+  #   date: 00000000
+  #   title: 360loc\_S00000\_atrium\_in
+  # 360loc_s00001_concourse_in:
+  #   platform: mobile_robot
+  #   label: 360loc\_S00000\_concourse\_in
+  #   date: 00000000
+  #   title: 360loc\_S00000\_concourse\_in
+  # 360loc_s00002_hall_in:
+  #   platform: mobile_robot
+  #   label: 360loc\_S00002\_hall\_in
+  #   date: 00000000
+  #   title: 360loc\_S00002\_hall\_in
+  # 360loc_s00003_piatrium_in:
+  #   platform: mobile_robot
+  #   label: 360loc\_S00000\_piatrium\_in
+  #   date: 00000000
+  #   title: 360loc\_S00000\_piatrium\_in
+Algorithms:
+  # KF-SPGO
+  # kf_spgo_cc_seqmatch:
+  #   fn: kf_spgo_cc_seqmatch
+  #   label: KF-SPGO-CC-SeqMatch
+  # nokf_spgo_cc_seqmatch:
+  #   fn: nokf_spgo_cc_seqmatch
+  #   label: NoKF-SPGO-CC-SeqMatch
+  # nokf_spgo_rc_seqmatch:
+  #   fn: nokf_spgo_rc_seqmatch
+  #   label: NoKF-SPGO-RC-SeqMatch
+  # hloc_sfm_netvlad_splg_390:
+  #   fn: hloc_sfm_netvlad_splg_390
+  #   label: HLoc-NetVLAD+SP+LG
+  # hloc_sfm_netvlad_splg_025:
+  #   fn: hloc_sfm_netvlad_splg_025
+  #   label: HLoc-NetVLAD+SP+LG-Dense
+  # --- no-ba (value0-2) ---
+  hloc_sfm_netvlad_splg_025_value0:
+    fn: hloc_sfm_netvlad_splg_025_value0
+    label: HLoc-SPLG-v0
+  hloc_sfm_netvlad_splg_025_value1:
+    fn: hloc_sfm_netvlad_splg_025_value1
+    label: HLoc-SPLG-v1
+  hloc_sfm_netvlad_splg_025_value2:
+    fn: hloc_sfm_netvlad_splg_025_value2
+    label: HLoc-SPLG-v2
+  hloc_sfm_netvlad_disk_dilg_025_value0:
+    fn: hloc_sfm_netvlad_disk_dilg_025_value0
+    label: HLoc-DISK-v0
+  hloc_sfm_netvlad_disk_dilg_025_value1:
+    fn: hloc_sfm_netvlad_disk_dilg_025_value1
+    label: HLoc-DISK-v1
+  hloc_sfm_netvlad_disk_dilg_025_value2:
+    fn: hloc_sfm_netvlad_disk_dilg_025_value2
+    label: HLoc-DISK-v2
+  # --- ba10 (value0-2) ---
+  hloc_sfm_netvlad_splg_025_value0_ba10:
+    fn: hloc_sfm_netvlad_splg_025_value0_ba10
+    label: HLoc-SPLG-v0-BA10
+  hloc_sfm_netvlad_splg_025_value1_ba10:
+    fn: hloc_sfm_netvlad_splg_025_value1_ba10
+    label: HLoc-SPLG-v1-BA10
+  hloc_sfm_netvlad_splg_025_value2_ba10:
+    fn: hloc_sfm_netvlad_splg_025_value2_ba10
+    label: HLoc-SPLG-v2-BA10
+  hloc_sfm_netvlad_disk_dilg_025_value0_ba10:
+    fn: hloc_sfm_netvlad_disk_dilg_025_value0_ba10
+    label: HLoc-DISK-v0-BA10
+  hloc_sfm_netvlad_disk_dilg_025_value1_ba10:
+    fn: hloc_sfm_netvlad_disk_dilg_025_value1_ba10
+    label: HLoc-DISK-v1-BA10
+  hloc_sfm_netvlad_disk_dilg_025_value2_ba10:
+    fn: hloc_sfm_netvlad_disk_dilg_025_value2_ba10
+    label: HLoc-DISK-v2-BA10
+
+RelDistances: []   # used to specify the sub-trajectory lengths in the relative error
+RelDistancePercentages: []

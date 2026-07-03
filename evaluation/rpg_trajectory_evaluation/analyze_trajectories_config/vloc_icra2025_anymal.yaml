@@ -1,0 +1,43 @@
+Datasets:
+  ops_msg_seq0:
+    platform: mobile_robot
+    label: Real-Seq0
+    date: 00000000
+    title: Real-Seq0
+  # ops_msg_seq1:
+  #   platform: mobile_robot
+  #   label: Real-Seq1
+  #   date: 00000000
+  #   title: Real-Seq1
+  # ops_msg_seq2:
+  #   platform: mobile_robot
+  #   label: Real-Seq2
+  #   date: 00000000
+  #   title: Real-Seq2
+Algorithms:
+  anymal_robotodom_robotodom:
+    fn: robot_odom
+    label: RobotOdom
+  anymal_robotodom_vloc:
+    fn: vloc
+    label: RobotOdom-VLoc
+  anymal_robotodom_pose_fusion:
+    fn: pose_fusion
+    label: RobotOdom-PS
+  anymal_robotodom_pose_fusion_opt:
+    fn: pose_fusion_opt
+    label: RobotOdom-PS-Opt
+  # anymal_airslam_airslam:
+  #   fn: airslam
+  #   label: AirSLAM
+  # anymal_airslam_vloc:
+  #   fn: airslam_vloc
+  #   label: AirSLAM-VLoc
+  # anymal_airslam_pose_fusion:
+  #   fn: airslam_pose_fusion
+  #   label: AirSLAM-Fusion
+  # anymal_airslam_pose_fusion_opt:
+  #   fn: airslam_pose_fusion_opt
+  #   label: AirSLAM-Fusion-Opt
+RelDistances: []   # used to specify the sub-trajectory lengths in the relative error
+RelDistancePercentages: []
