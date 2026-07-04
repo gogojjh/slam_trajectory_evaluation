@@ -838,9 +838,11 @@ if __name__ == '__main__':
     algorithms = [alg for alg in algorithms if alg not in remove_algorithms]
 
     # create the result path after filtering missing trajectories
-    all_algorithm = '_'.join(algorithms) if algorithms else 'empty'
+    # Use config filename instead of concatenated algorithm names to avoid
+    # "File name too long" (Errno 36) when many algorithms are evaluated.
+    config_stem = os.path.splitext(os.path.basename(str(config_fn)))[0]
     report_result_path = os.path.join(
-        output_dir, 'report_benchmark_{}'.format(all_algorithm))
+        output_dir, 'report_benchmark_{}'.format(config_stem))
     print('Create result path: {}'.format(report_result_path))
     os.system('mkdir -p {}'.format(report_result_path))
     # if os.path.exists(report_result_path):
